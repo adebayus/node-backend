@@ -14,7 +14,18 @@ const requestListerner = (request, response) => {
 		response.end("<h1>Hello</h1>");
 	}
 	if (method === "POST") {
-		response.end("<h1>Hai</h1>");
+		let body = [];
+
+		request.on("data", (chunk) => {
+			body.push(chunk);
+		});
+
+		request.on("end", () => {
+			body = Buffer.concat(body).toString();
+			const { name } = JSON.parse(body);
+			response.end(`<h1>, ${name}`);
+		});
+		// response.end("<h1>Hai</h1>");
 	}
 	if (method === "PUT") {
 		response.end("<h1>Bonjour</h1>");
