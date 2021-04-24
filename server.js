@@ -15,6 +15,7 @@ const requestListerner = (request, response) => {
 		if (method === "GET") {
 			response.end("<h1>Ini Adalah Homepage</h1>");
 		} else {
+			response.statusCode = 400;
 			response.end("Halaman tidak dapat diakses dengan <any> request");
 		}
 	} else if (url === "/about") {
@@ -31,9 +32,12 @@ const requestListerner = (request, response) => {
 				response.end(`<h1>Halo, ${name} </h1>`);
 			});
 		} else {
+			response.statusCode = 400;
 			response.end("<h1> Halaman tidak dapat diakses</h1>");
 		}
 	} else {
+		response.statusCode = 404;
+
 		response.end("</h1>Halaman tidak ditemukan</h1>");
 	}
 };
