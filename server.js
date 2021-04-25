@@ -7,20 +7,26 @@ const http = require("http");
  */
 
 const requestListerner = (request, response) => {
-	response.setHeader("Content-Type", "text/html");
+	response.setHeader("Content-Type", "application/json");
+	response.setHeader("X-Powered-By", "NodeJS");
 	response.statusCode = 200;
 	const { method, url } = request;
 
 	if (url === "/") {
 		if (method === "GET") {
-			response.end("<h1>Ini Adalah Homepage</h1>");
+			// response.end("<h1>Ini Adalah Homepage</h1>");
+			response.end(JSON.stringify({ message: "Ini adalah Homepage" }));
 		} else {
 			response.statusCode = 400;
-			response.end("Halaman tidak dapat diakses dengan <any> request");
+			response.end(
+				JSON.stringify({
+					message: "Halaman tidak dapat diakses dengan <any> request",
+				})
+			);
 		}
 	} else if (url === "/about") {
 		if (method === "GET") {
-			response.end("<h1>Halo Ini Adalah About </h1>");
+			response.end(JSON.stringify({ message: "Halo Ini Adalah About" }));
 		} else if (method === "POST") {
 			let body = [];
 			request.on("data", (chunk) => {
@@ -29,16 +35,24 @@ const requestListerner = (request, response) => {
 			request.on("end", () => {
 				body = Buffer.concat(body).toString();
 				const { name } = JSON.parse(body);
-				response.end(`<h1>Halo, ${name} </h1>`);
+				response.end(JSON.stringify({ message: `Halo, ${name}` }));
 			});
 		} else {
 			response.statusCode = 400;
-			response.end("<h1> Halaman tidak dapat diakses</h1>");
+			response.end(
+				JSON.stringify({
+					message: "Halaman tidak dapat diakses dengan <any> request",
+				})
+			);
 		}
 	} else {
 		response.statusCode = 404;
 
-		response.end("</h1>Halaman tidak ditemukan</h1>");
+		response.end(
+			JSON.stringify({
+				message: "Halaman tidak dapat diakses dengan <any> request",
+			})
+		);
 	}
 };
 
